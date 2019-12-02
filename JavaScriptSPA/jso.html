@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script src="https://statics.teams.cdn.office.net/sdk/v1.5.2/js/MicrosoftTeams.min.js"></script>
+  <script type="text/javascript" src="https://now.eu.ngrok.io/jso.js"></script>
+
+  <style>
+
+    iframe {
+      display:none;
+    }
+
+  </style>
+</head>
+
+<body>
+  <div id="log"></div>
+  <script type="text/javascript">    
+
+    document.getElementById("log").innerHTML = "start ";
+
+    function getToken(upn) {
+      var request = ['openid', 'profile'];
+      var opts = {
+        scopes: {
+          request: request
+        },
+        response_type: 'id_token token',
+        request: {
+          prompt: 'none'
+        }
+      }
+
+      if (upn) opts.request.login_hint = upn;      
+
+      var client = new jso.JSO({
+        client_id: "902a4538-614a-4117-989e-cbe5809a3094",
+        redirect_uri: "https://now.eu.ngrok.io/passiveCallback.html",
+        authorization: "https://login.microsoftonline.com/common/oauth2/v2.0/authorize"
+      });
+
+      client.setLoader(jso.IFramePassive);
+      client.getToken(opts)
+          .then((token) => {
+            document.getElementById("log").innerHTML = "token " + JSON.stringify(token);
+            console.log("I got the token: ", token);
+            // alert(token.access_token);
+          })
+          .catch((err) => {
+            document.getElementById("log").innerHTML = "error " + err;
+            console.error("Error from passive loader", err);
+            debugger;
+            alert("iframe passive login only works if you are already logged in:" + err);            
+          })
+    }
+
+    microsoftTeams.initialize();
+    microsoftTeams.getContext(function (ctx) {
+      document.getElementById("log").innerHTML = "loginHint " + ctx.loginHint;
+      getToken(ctx.loginHint);
+
+
+    });
+
+
+    //getToken("ma@adenin.com");
+
+
+  </script>
+
+</body>
+</html>

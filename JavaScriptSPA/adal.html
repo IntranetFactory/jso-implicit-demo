@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Quickstart for MSAL JS</title>
+  <!--<script src="https://secure.aadcdn.microsoftonline-p.com/lib/1.0.17/js/adal.min.js"></script>-->
+  <script src="https://my.digitalassistant.app/components/a-tts/adal.js"></script>
+</head>
+<body>
+  <div class="container">
+    <div class="leftContainer">
+      <p id="WelcomeMessage">Welcome to the Microsoft Authentication Library For Javascript Quickstart</p>
+      <button id="SignIn" onclick="signIn()">Sign In</button>
+    </div>
+    <div class="rightContainer">
+      <pre id="json"></pre>
+    </div>
+  </div>
+  <script>
+
+    window.onhashchange = function (e) {
+      debugger;
+    }
+
+    console.log("start " + window.location.hash);
+
+    function getToken(upn) {
+      console.log("getToken " + upn);
+      var config = {
+        clientId: '902a4538-614a-4117-989e-cbe5809a3094',
+        callback: callbackFunction,
+        cacheLocation: "localStorage",
+        navigateToLoginRequestUrl: false,
+      };
+
+      config.extraQueryParameter = "scope=openid+profile&login_hint=" + encodeURIComponent(upn);
+
+      var authenticationContext = new AuthenticationContext(config);
+
+      function callbackFunction(errorDesc, token, error, tokenType) {
+        console.log(tokenType + ": " + token);
+        debugger;
+      }
+
+      var isCallback = authenticationContext.isCallback(window.location.hash);
+      console.log("isCallback " + isCallback);      
+      if (isCallback) {
+        debugger;
+        authenticationContext.handleWindowCallback();
+
+        //var requestInfo = authenticationContext.getRequestInfo(window.location.hash);
+        ////get the token provided resource. to get the id_token, we need to pass the client id
+        //var _token = authenticationContext.getCachedToken(config.clientId);
+        //authenticationContext.saveTokenFromHash(requestInfo);
+      }
+
+
+      // See if there's a cached user and it matches the expected user
+      let cachedUser = authenticationContext.getCachedUser();
+      if (cachedUser) {
+        debugger;
+        if (cachedUser.profile.upn !== upn) {
+          // User doesn't match, clear the cache
+          authenticationContext.clearCache();
+        } else {
+          document.getElementById("WelcomeMessage").innerHTML = "user: " + cachedUser.userName;
+        }
+      }
+
+      // Get the id token (which is the access token for resource = clientId)
+      let token = authenticationContext.getCachedToken(config.clientId);
+      if (token) {
+        console.log(token);
+        debugger;
+      } else {
+        // No token, or token is expired
+        //authenticationContext._renewIdToken(function (err, idToken) {
+        authenticationContext.acquireToken("https://graph.microsoft.com", function (err, token) {
+          if (err) {
+            console.log("Renewal failed: " + err);
+            debugger;
+            // Failed to get the token silently; show the login button
+            //showLoginButton();
+            // You could attempt to launch the login popup here, but in browsers this could be blocked by
+            // a popup blocker, in which case the login attempt will fail with the reason FailedToOpenWindow.
+          } else {
+            console.log(idToken);
+            debugger;
+          }
+        });
+      }
+    }
+
+
+    getToken("james@toastergroup.onmicrosoft.com");
+    //getToken("ma@adenin.com");
+
+  </script>
+</body>
+</html>

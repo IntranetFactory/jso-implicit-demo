@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+  <script src="https://statics.teams.cdn.office.net/sdk/v1.5.2/js/MicrosoftTeams.min.js"></script>
+  <script src="https://secure.aadcdn.microsoftonline-p.com/lib/1.0.17/js/adal.min.js"></script>
+</head>
+
+<body>
+  <script type="text/javascript">
+    // ADAL.js configuration
+    let config = {
+      clientId: "902a4538-614a-4117-989e-cbe5809a3094",
+      // redirectUri must be in the list of redirect URLs for the Azure AD app
+      redirectUri: window.location.origin + "/tab-auth/silent-end",
+      cacheLocation: "localStorage",
+      navigateToLoginRequestUrl: false,
+    };
+
+    microsoftTeams.initialize();
+    microsoftTeams.getContext(function (ctx) {
+
+      debugger;
+
+      // Set up extra query parameters for ADAL
+      // - openid and profile scope adds profile information to the id_token
+      // - login_hint provides the expected user name
+      if (ctx.loginHint) {
+        config.extraQueryParameter = "scope=openid+profile&login_hint=" + encodeURIComponent(ctx.loginHint);
+      } else {
+        config.extraQueryParameter = "scope=openid+profile";
+      }
+
+
+
+    });
+
+  </script>
+
+</body>
+</html>
