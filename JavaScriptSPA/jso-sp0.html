@@ -1,0 +1,42 @@
+<script type="text/javascript" src="http://localhost:62114/jso.js"></script>
+
+<script type="text/javascript">
+
+    function getToken(upn) {
+        var request = ['openid', 'profile'];
+        var opts = {
+            scopes: {
+                request: request
+            },
+            response_type: 'id_token token',
+            request: {
+                prompt: 'none'
+            }
+        }
+
+        if (upn) opts.request.login_hint = upn;
+
+        var client = new jso.JSO({
+            client_id: "b9f749db-3d11-4da6-b833-a1bd914faa68",
+            //redirect_uri: "https://now.eu.ngrok.io/passiveCallback.html",
+            redirect_uri: "http://localhost:62114/passiveCallback.html",
+            authorization: "https://login.microsoftonline.com/common/oauth2/v2.0/authorize"
+        });
+
+        client.setLoader(jso.IFramePassive);
+        client.getToken(opts)
+            .then((token) => {
+                debugger;
+                console.log("I got the token: ", token);
+                // alert(token.access_token);
+            })
+            .catch((err) => {
+                debugger;
+                console.error("Error from passive loader", err);
+                alert("iframe passive login only works if you are already logged in:" + err);
+            })
+    }
+
+
+    getToken();
+</script>

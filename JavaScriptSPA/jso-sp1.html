@@ -1,0 +1,29 @@
+<script type="text/javascript" src="http://localhost:62114/jso.js"></script>
+
+<script type="text/javascript">
+
+    window.Tangere = window.Tangere || {};
+    window.Tangere.identity = {
+        session_service´_url: "",
+        client_id: "c44ce7b8-8f45-4ec6-9f7e-e4a80f9d8edc",        
+        redirect_uri: "http://localhost/components/sso/passiveCallback.html",
+        authorization: "https://login.microsoftonline.com/common/oauth2/v2.0/authorize",
+        login_hint: _spPageContextInfo.userPrincipalName
+    }
+
+    function getToken() {        
+        
+        var client = new jso.JSO();
+
+        client.getToken()
+            .then((token) => {
+                console.log("I got the token: ", token);
+                debugger;
+            })
+            .catch((err) => {
+                console.error("Error from passive loader", err);                
+            })
+    }
+    
+    getToken();
+</script>

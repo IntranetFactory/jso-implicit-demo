@@ -1,0 +1,16 @@
+
+
+<script type="text/javascript">
+
+    window.Tangere = window.Tangere || {};
+    window.Tangere.identity = {
+        session_service_url: "http://localhost:62114/api/session/myprofile", // "https://app.adenin.com/api-79j7V/session/myprofile",
+        client_id: "c44ce7b8-8f45-4ec6-9f7e-e4a80f9d8edc",
+        redirect_uri: "http://localhost/components/sso/passiveCallback.html",
+        authorization: "https://login.microsoftonline.com/common/oauth2/v2.0/authorize",
+        login_hint: _spPageContextInfo.userPrincipalName
+    }
+
+</script>
+
+<script type="text/javascript" src="http://localhost/components/at-app-context-oidc.js" async></script>
