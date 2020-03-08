@@ -70,6 +70,7 @@
     <Content Include="auth-end.html" />
     <Content Include="adal.html" />
     <Content Include="empty.html" />
+    <Content Include="jso-sp1.html" />
     <Content Include="jso-sp0.html" />
     <Content Include="jso-sp.html" />
     <Content Include="jso.js" />
